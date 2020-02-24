@@ -13,6 +13,7 @@ use Cart as Cart;
             use PHPMailer\PHPMailer\PHPMailer;
             use PHPMailer\PHPMailer\SMTP;
             use PHPMailer\PHPMailer\Exception;
+            use Barryvdh\DomPDF\Facade as PDF;
             
             // Load Composer's autoloader
             require 'C:\Users\Jotad\Documents\Xampp\htdocs\LaravelShop\vendor\autoload.php';
@@ -74,6 +75,14 @@ class Cliente extends Controller
         ]);
 
             }
+        
+            $data = [
+                'titulo' => 'Pedido LaravelShop'
+            ];
+         
+            $data = PDF::loadView('mail.email', $data)
+                ->save(storage_path('app/public/pdf') . 'pedido.pdf');
+            
  
             // Instantiation and passing `true` enables exceptions
             $mail = new PHPMailer(true);
@@ -91,17 +100,17 @@ class Cliente extends Controller
             
                 //Recipients
                 $mail->setFrom('laravelshopemail@gmail.com', 'Shop');
-                $mail->addAddress('josedavidgome96@gmail.com', 'Joe User');     // Add a recipient   // Name is optional
+                $mail->addAddress(auth()->user()->email, auth()->user()->name);     // Add a recipient   // Name is optional
                 $mail->addReplyTo('info@example.com', 'Information');
             
                 // Attachments
-                //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+                $mail->addAttachment(storage_path('app/public/pdf') . 'pedido.pdf');         // Add attachments
                 //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
             
                 // Content
                 $mail->isHTML(true);                                  // Set email format to HTML
                 $mail->Subject = 'Este es tu pedido, ¡Gracias por confiar en nosotros!';
-                $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+                $mail->Body    = view('mail.email') ;
                 $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
             
                 $mail->send();
