@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
                 $table->string('tipo');
                 $table->rememberToken();
                 $table->timestamps();
+                $table->foreign('id')->references('idUser')->on('pedido');
             });
         }
     }

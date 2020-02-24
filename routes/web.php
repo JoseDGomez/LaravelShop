@@ -29,9 +29,12 @@ Route::post('/deleteProducto', 'Carrito@delete');
 
 Route::get('/deleteCart', 'Carrito@destroy');
 
-Route::get('login', 'Usuario@index');
 
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/checkout' , 'Cliente@checkout');
+
+Route::post('/checkout' , 'Cliente@addPedido');

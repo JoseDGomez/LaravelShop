@@ -18,7 +18,7 @@ class Carrito extends Controller
         ]);
     }
 
-    public function addProductoInicio(Request $request, $id){
+    public function addProductoInicio(Request $request){
         
         $producto = Articulos::find($request->id);
 

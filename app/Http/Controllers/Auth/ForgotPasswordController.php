@@ -17,28 +17,22 @@ class ForgotPasswordController extends Controller
     // }
  
     // Añadimos las respuestas JSON, ya que el Frontend solo recibe JSON
-    public function sendResetLinkEmail(Request $request)
-    {
-        $this->validate($request, ['email' => 'required|email']);
- 
-        $response = $this->broker()->sendResetLink(
-            $request->only('email')
-        );
-  
-        switch ($response) {
-            case \Password::INVALID_USER:
-                return response()->error($response, 422);
-                break;
- 
-            case \Password::INVALID_PASSWORD:
-                return response()->error($response, 422);
-                break;
- 
-            case \Password::INVALID_TOKEN:
-                return response()->error($response, 422);
-                break;
-            default: 
-                return response()->success($response, 200);
-        }
+    protected function sendResetLinkResponse($response)
+{
+    if (request()->header('Content-Type') == 'application/json') {
+        return response()->json(['success' => 'Recovery email sent.']);
     }
+    return back()->with('status', trans($response));
+}
+
+protected function sendResetLinkFailedResponse(Request $request, $response)
+{
+    if (request()->header('Content-Type') == 'application/json') {
+        return response()->json(['error' => 'Oops something went wrong.']);
+    }
+
+    return back()->withErrors(
+        ['email' => trans($response)]
+    );
+}
 }

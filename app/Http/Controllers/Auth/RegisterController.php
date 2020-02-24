@@ -70,7 +70,7 @@ class RegisterController extends Controller
     protected function register(Request $data)
     {
         
-        return User::create([
+        User::create([
             'name' => $data['name'],
             'apellidos' => $data['apellidos'],
             'email' => $data['email'],
@@ -80,7 +80,7 @@ class RegisterController extends Controller
             
         ]);
 
-        return redirect('/');
+        return redirect('login');
         
     }
 }

@@ -76,6 +76,7 @@
 					</tbody>
 					
 					
+					
 					<tfoot>
 						
 						<tr>
@@ -86,9 +87,9 @@
 								
 							@else
 							@guest
-							<td><a href="#" class="btn btn-success btn-block">Inicia sesion para comprar<i class="fa fa-angle-right"></i></a></td>
+							<td><a href="{{url('home')}}" class="btn btn-success btn-block">Inicia sesion para comprar<i class="fa fa-angle-right"></i></a></td>
 							@else
-							<td><a href="#" class="btn btn-success btn-block">Proceder al pago <i class="fa fa-angle-right"></i></a></td>
+							<td><a href="{{url('checkout')}}" class="btn btn-success btn-block">Proceder al pago <i class="fa fa-angle-right"></i></a></td>
 							@endguest
 							@endif
 						</tr>
