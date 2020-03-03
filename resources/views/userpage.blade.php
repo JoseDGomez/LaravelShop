@@ -51,15 +51,20 @@
 								</tr>
 							  </thead>
 							  <tbody>
-								  @foreach ($pedido as $pedidos)
+								  @foreach ($pedidos as $pedido)
+									  
+								  
 								<tr>
-								  <td>{{$pedidos->idPedido}}</td>
-								  <td>{{$pedidos->Nombre}}</td>
-								  <td>{{$pedidos->Apellidos}}</td>
-								  <td>{{$pedidos->Fecha}}</td>
-								  <td>{{$pedidos->Direccion}}</td>
-								  <td>{{$pedidos->DNI}}</td>
-								  <td>{{$pedidos->Estado}}</td>
+								  <td>{{$pedido->idPedido}}</td>
+								  <td>{{$pedido->Nombre}}</td>
+								  <td>{{$pedido->Apellidos}}</td>
+								  <td>{{$pedido->Fecha}}</td>
+								  <td>{{$pedido->Direccion}}</td>
+								  <td>{{$pedido->DNI}}</td>
+								  <td>{{$pedido->Estado}}</td>
+								  <td><a href=""><button>Descargar PDF</button></a><a href=""><button>Cancelar</button></td>
+								  
+
 								</tr>
 								@endforeach
 							  </tbody>

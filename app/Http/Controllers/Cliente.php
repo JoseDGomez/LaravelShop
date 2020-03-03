@@ -27,9 +27,16 @@ class Cliente extends Controller
         
         $articulos = Articulos::where('Destacado', 1)->paginate(4);
         $categoria = Categoria::all();
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
+
+ // 'application/json; charset=utf8'
+ // '{"id": 1420053, "name": "guzzle", ...}'
+$localizacion = json_decode($response->getBody());
+
         return view('inicio', [
             'articulos' => $articulos],
-        ['categoria' => $categoria
+        ['categoria' => $categoria, 'localizacion' => $localizacion
         ]);
         }
     
@@ -78,7 +85,9 @@ class Cliente extends Controller
         ]);
 
             }
-        
+            /*$stock = Articulos::select('Stock')->where('idProducto', Cart::get($item->rowId)->id);
+            Articulos::where('idProducto', Cart::get($item->rowId)->id)->update(['Stock' => $stock-Cart::get($item->rowId)->qty]);*/
+
             $data = [
                 'titulo' => 'Pedido LaravelShop'
             ];
@@ -121,7 +130,8 @@ class Cliente extends Controller
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }    
-           
+        
+        
                     
          Cart::destroy();   
          return redirect('/');
@@ -129,11 +139,11 @@ class Cliente extends Controller
 
       public function userpage(){
         $categoria = Categoria::all();
-       
-        $pedido = Pedido::where('users_id', auth()->user()->id);
+        $pedido = Pedido::where('users_id', auth()->user()->id)->get();
+        
         return view('userpage', [
             'categoria' => $categoria
-        ],['pedido' => $pedido
+        ,'pedidos' => $pedido
         ]);
       }  
 

@@ -47,10 +47,15 @@
 							
 							<div>
 								<h3 class="product-price">{{round($detalles->Precio_Venta-(($detalles->Precio_Venta*$detalles->Descuento)/100),2)}}<del class="product-old-price">{{$detalles->Precio_Venta}}</del></h3>
-								<span class="product-available">In Stock</span>
+								@if ($detalles->Stock > 0)
+								<span class="product-available">En stock</span>
+								@else
+								<span class="product-old-price">Sin existencias</span>
+								@endif
 							</div>
 							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 							<div class="add-to-cart">
+								@if ($detalles->Stock > 0)
 								<div class="qty-label">
 									Qty
 									
@@ -70,6 +75,10 @@
 									
 								<input type="submit" class="add-to-cart-btn" value=" add to cart">
 										</form>
+									@else
+										
+									@endif
+									
 								<!-- /Hidden form para datos del producto -->
 							</div>
 						</div>

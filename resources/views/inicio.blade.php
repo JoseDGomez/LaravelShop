@@ -86,9 +86,7 @@
 											<i class="fa fa-star"></i>
 										</div>
 									</div>
-									<div class="add-to-cart">
-										<button href="{{url('addProducto/'.$articulo->idProductos)}}" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Añadir al carrito</button>
-									</div>
+									
 								</div>
 							</div>
 							
