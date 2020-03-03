@@ -13,7 +13,7 @@
 
 		<!-- Bootstrap -->
 		<link type="text/css" rel="stylesheet" href="{{ asset('/css/bootstrap.min.css') }}"/>
-
+		<link type="text/css" rel="stylesheet" href="{{ asset('/css/tabla.css') }}"/>
 		<!-- Slick -->
 		<link type="text/css" rel="stylesheet" href="{{ asset('/css/slick.css') }}"/>
 		<link type="text/css" rel="stylesheet" href="{{ asset('/css/slick-theme.css') }}"/>
@@ -61,7 +61,7 @@
 						
                         {{ csrf_field() }}
 					</form>
-					<li><a href="#"><i class="fa fa-user-o"></i>{{auth()->user()->name}}</a></li>
+					<li><a href="{{ url('/userpage') }}"><i class="fa fa-user-o"></i>{{auth()->user()->name}}</a></li>
                         @endguest
 						
 					</ul>

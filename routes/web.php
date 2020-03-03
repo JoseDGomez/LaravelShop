@@ -38,3 +38,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/checkout' , 'Cliente@checkout');
 
 Route::post('/checkout' , 'Cliente@addPedido');
+
+Route::get('/userpage', 'Cliente@userpage');
+
+Route::post('/baja', 'Cliente@bajausuario');

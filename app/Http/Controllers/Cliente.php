@@ -8,6 +8,8 @@ use App\Model\LineaPedido;
 use App\Model\Articulos;
 use App\Model\Categoria;
 use Cart as Cart;
+use App\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
  // Import PHPMailer classes into the global namespace
             // These must be at the top of your script, not inside a function
             use PHPMailer\PHPMailer\PHPMailer;
@@ -21,7 +23,8 @@ use Cart as Cart;
 
 class Cliente extends Controller
 {
-    public function index(){
+    public function index(Request $request){
+        
         $articulos = Articulos::where('Destacado', 1)->paginate(4);
         $categoria = Categoria::all();
         return view('inicio', [
@@ -89,7 +92,7 @@ class Cliente extends Controller
             
             try {
                 //Server settings
-                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
+                //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
                 $mail->isSMTP();                                            // Send using SMTP
                 $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
                 $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
@@ -123,4 +126,26 @@ class Cliente extends Controller
          Cart::destroy();   
          return redirect('/');
         }
+
+      public function userpage(){
+        $categoria = Categoria::all();
+       
+        $pedido = Pedido::where('users_id', auth()->user()->id);
+        return view('userpage', [
+            'categoria' => $categoria
+        ],['pedido' => $pedido
+        ]);
+      }  
+
+      public function bajausuario(Request $request){
+        Pedido::where('users_id', $request->id)->where('Estado', 'P')->update(['Estado' => 'C']);
+        User::where('id', $request->id)->delete();
+        
+        return redirect('/');
+      }
+
+      public function deletePedido(){
+        Pedido::where('users_id', $request->id)->delete();
+        return redirect('/userpage');
+      }
     }
