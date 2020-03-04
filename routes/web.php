@@ -53,3 +53,5 @@ Route::get('/modificardatos', 'Cliente@cambiomodificacion');
 Route::get('/pedido/{id}', 'Cliente@detallePedido');
 
 Route::get('/download/{id}', 'Cliente@downloadPDF');
+
+Route::post('/updateUser', 'Cliente@updateUser');

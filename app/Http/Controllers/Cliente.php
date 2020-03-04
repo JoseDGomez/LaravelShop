@@ -25,9 +25,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Cliente extends Controller
 {
 
-    
+    /**
+ * @brief Carga de la vista de inicio
+ * 
+ */
 
-    public function index(Request $request){
+
+    public function index(){
         
         $articulos = Articulos::where('Destacado', 1)->paginate(4);
         $categoria = Categoria::all();
@@ -44,7 +48,11 @@ class Cliente extends Controller
         ['categoria' => $categoria, 'localizacion' => $localizacion
         ]);
         }
-    
+    /**
+ * @brief MOSTRAR LOS PRODUCTOS POR CATEGORIA PAGINADOS
+ * @param $id -> ID DE LA CATEGORIA DE LOS PRODUCTOS QUE SE VAN A MOSTRAR
+ */
+
         public function productoCategoria($id){
             $client = new \GuzzleHttp\Client();
             $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
@@ -61,6 +69,11 @@ class Cliente extends Controller
                 ]);
         }
 
+            /**
+ * @brief MOSTRAR LOS DETALLES DE UN PRODUCTO
+ * @param $id -> ID DEL PRODUCTO DEL QUE SE VAN A VER LOS DETALLES PARA LA COMPRA
+ */
+
         public function detallesProducto($id){
             $client = new \GuzzleHttp\Client();
         $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
@@ -76,6 +89,10 @@ class Cliente extends Controller
                 ]);
         }
 
+            /**
+ * @brief CARGA DE LA VISTA DE COMPRA CON LOS DETALLES DEL PEDIDO Y LOS DATOS DE ENVIO
+ * 
+ */
         public function checkout(){
             $client = new \GuzzleHttp\Client();
         $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
@@ -88,7 +105,12 @@ class Cliente extends Controller
                 'categoria' => $categoria, 'localizacion' => $localizacion
                 ]);
         }
-        
+      
+            /**
+ * @brief CREACION DEL PEDIDO
+ * @param $request -> DATOS QUE SE RECOGEN PARA LA CREACION DEL PEDIDO CON EL POSTERIOR ENVIO DEL CORREO Y PDF
+ */
+
       public function addPedido(Request $request){
         $pedido = Pedido::create(['Nombre' =>$request->nombre ,
             'Apellidos' => $request->apellidos ,
@@ -161,6 +183,11 @@ class Cliente extends Controller
          return redirect('/');
         }
 
+            /**
+ * @brief CARGA DE LA VISTA DEL PANEL DEL USUARIO
+ * 
+ */
+
       public function userpage(){
         $client = new \GuzzleHttp\Client();
         $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
@@ -177,17 +204,29 @@ class Cliente extends Controller
         ]);
       }  
 
+          /**
+ * @brief FUNCION PARA DAR DE BAJA UN USUARIO CON CANCELACION DE LOS PEDIDOS QUE NO SE HAN ENVIADO
+ * @param $request -> DATOS RECOGIDOS PARA LA BAJA DEL USUARIO
+ */
       public function bajausuario(Request $request){
         Pedido::where('users_id', $request->id)->where('Estado', 'P')->update(['Estado' => 'C']);
         User::where('id', $request->id)->delete();
         
         return redirect('/');
       }
-
+         /**
+ * @brief FUNCION PARA CANCELAR PEDIDOS (SOLO SI NO SE HAN ENVIADO)
+ * @param $id -> ID DEL PEDIDO QUE SE VA A CANCELAR
+ */
       public function deletePedido($id){
         Pedido::where('idPedido', $id)->update(['Estado' => 'C']);
         return redirect('/userpage');
       }
+      
+         /**
+ * @brief CARGA DE LA VISTA DE MODIFICACION DE DATOS DEL USUARIO
+ * 
+ */
 
       public function cambiomodificacion(){
         $categoria = Categoria::all();
@@ -203,6 +242,11 @@ class Cliente extends Controller
         'categoria' => $categoria, 'localizacion' => $localizacion
         ]);
       }
+
+         /**
+ * @brief CARGA DE LA VISTA DE LOS DETALLES DEL PEDIDO
+ * @param $id -> ID DEL PEDIDO QUE SE VA A MOSTRAR
+ */
 
       public function detallePedido($id){
         $idPedido = $id;  
@@ -231,7 +275,10 @@ class Cliente extends Controller
             'productos' => $productos, 'categoria' => $categoria, 'localizacion' => $localizacion, 'idPedido' => $id
         ]);
       }
-
+         /**
+ * @brief DESCARGA DEL PDF CON LA INFORMACION DE UN PEDIDO
+ * @param $id -> ID DEL PEDIDO QUE SE VA A MOSTRAR EN EL PDF
+ */
       public function downloadPDF($id)
       {
           
@@ -252,11 +299,26 @@ class Cliente extends Controller
           $pdf= PDF::loadView('factura', array("productos"=>$productos))->save(storage_path('app/public/') . 'factura.pdf');
           return $pdf->download('factura.pdf');
       
-         
-      
-      
-      
-     
-      }  
+      }
+               /**
+ * @brief MODIFICACION DE LOS DATOS DE UN USUARIO
+ * @param $request -> DATOS DEL USUARIO QUE SE VAN A MODIFICAR (CON VALIDACION DEL FORMULARIO)
+ */
+      public function updateUser(Request $request){
+        $data = request()->validate([
+            "nombre"=>"required|string",
+            "apellidos"=>"required|string",
+            "direccion"=>"required|string|min:4",
+            "email"=>"required|string|email",
+            "dni"=>"required|string|min:9|max:9",
+        ]);
+        User::where("id", $request->id)->update([
+            "name"=>$data["nombre"],
+            "apellidos"=>$data["apellidos"],
+            "email"=>$data["email"],
+            "dni"=>$data["dni"],
+            "direccion"=>$data["direccion"]]);
+        return redirect("/modificardatos")->with(["exito"=> 1]);
+      }
 }
     

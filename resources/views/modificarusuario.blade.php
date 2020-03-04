@@ -23,16 +23,80 @@
 			<div class="container">
 				<!-- row -->
 				<div class="row">
-                  
+                    @if ($errors->any())
+                    <div class="row text-center" style="margin-left:0.5px;">
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    @elseif(Session::has("exito"))
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="alert alert-success">
+                                <span>Datos modificados con exito</span>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                     <h3>Modificar datos</h3>
-					<form action="{{ url('/checkout') }}" method="post">
+					<form action="{{ url('/updateUser') }}" method="post">
                         {{ csrf_field() }}
-                    <input class="input" type="text" name="direccion" value="{{auth()->user()->direccion}}" placeholder="Direccion" >
-                    <input class="input" type="text" name="dni" value="{{auth()->user()->dni}}" placeholder="DNI" >
-                    <input class="input" type="text" name="nombre" value="{{auth()->user()->name}}" placeholder="Nombre" >
-                    <input class="input" type="text" name="apellidos" value="{{auth()->user()->apellidos}}" placeholder="Apellidos" >
+                        <div class="toggle-bar">
+                            <div class="toggle-register">
+                                <label for="exampleFormControlInput1"><h4>Informacion de la cuenta</h4></label>
+                            </div>
+                            </div>
+                            @if ($errors->any())
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Nombre</label>
+                                    <input type="text" class="form-control" name="nombre" value="{{old('name')}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Apellidos</label>
+                                    <input type="text" class="form-control" name="apellidos" value="{{old('apellidos')}}">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Dirección</label>
+                                    <input type="text" class="form-control" name="direccion" value="{{old('direccion')}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Correo Electronico</label>
+                                    <input type="email" class="form-control" name="email" value="{{old('email')}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">DNI</label>
+                                    <input type="text" class="form-control" name="dni" value="{{old('dni')}}">
+                                </div>
+                            @else
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Nombre</label>
+                                    <input type="text" class="form-control" name="nombre" value="{{Auth::user()->name}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Apellidos</label>
+                                    <input type="text" class="form-control" name="apellidos" value="{{Auth::user()->apellidos}}">
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Dirección</label>
+                                    <input type="text" class="form-control" name="direccion" value="{{Auth::user()->direccion}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Correo Electronico</label>
+                                    <input type="email" class="form-control" name="email" value="{{Auth::user()->email}}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">DNI</label>
+                                    <input type="text" class="form-control" name="dni" value="{{Auth::user()->dni}}">
+                                </div>
+                            @endif
                     
-                    <input type="submit" class="primary-btn " value="Modificar"><input type="submit" class="primary-btn " align="right" value="Modificar">
+                    <input type="submit" class="primary-btn " value="Modificar">
 					</form>
                         
 						</div>
