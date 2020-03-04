@@ -30,6 +30,7 @@
 						<input type="hidden" name="id" value={{auth()->user()->id}}>
 						<input type="submit" value="Dar de baja">
 					</form>
+					<a href="{{url('/modificardatos')}}"><button>Modificar datos</button></a>
 					<br>
 					<h2>Pedidos</h2>
 
@@ -62,8 +63,12 @@
 								  <td>{{$pedido->Direccion}}</td>
 								  <td>{{$pedido->DNI}}</td>
 								  <td>{{$pedido->Estado}}</td>
-								  <td><a href=""><button>Descargar PDF</button></a><a href=""><button>Cancelar</button></td>
-								  
+								  <td><a href="{{url('/pedido/'.$pedido->idPedido)}}"><button>Mostrar pedido</button></a>
+									@if ($pedido->Estado != "E" && $pedido->Estado != "C")
+									<a href="{{url('/cancelPedido/'.$pedido->idPedido)}}"><button>Cancelar</button></td>
+									@else
+										
+									@endif
 
 								</tr>
 								@endforeach

@@ -79,22 +79,28 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(Cart::content() as $producto)
-           
-            <tr>
-                
-                <td>{{ $producto->name }}</td>
-                <td>{{ $producto->price }}€</td>
-                <td>{{ $producto->qty }}</td>
-                <td>{{ $producto->price * $producto->qty }}€</td>
-            </tr>
-           
-        @endforeach
+        @foreach ($productos as $producto)
+        @if($producto !== end($productos))
+      <tr>
+        <td>{{$producto['Nombre']}}</td>
+        <td>{{$producto['Cantidad']}}</td>
+        <td>{{$producto['Precio']}}</td>
+        <td>{{$producto['Total']}}</td>
+        
+      </tr>
+      @endif
+      @endforeach
+    </tbody>
+    
+  
+  <div>
+  <h3>Total: {{$productos['totaltodo']}} €</h3>
+  </div>
     </tbody>
     <tfoot>
         <tr>
             <td colspan="4" style="background-color: white;color:black;border: 5px solid #F8694A;;"><B>Total del pedido:</B></td>
-            <td style="background-color: white;color:black;border: 5px solid #F8694A;"><B>{{Cart::total()}}€</B></td>
+            <td style="background-color: white;color:black;border: 5px solid #F8694A;"><B>{{$productos['totaltodo']}} €</B></td>
         </tr>
     </tfoot>
     </table>

@@ -17,7 +17,7 @@ class ForgotPasswordController extends Controller
     // }
  
     // Añadimos las respuestas JSON, ya que el Frontend solo recibe JSON
-    protected function sendResetLinkResponse($response)
+    /*protected function sendResetLinkResponse($response)
 {
     if (request()->header('Content-Type') == 'application/json') {
         return response()->json(['success' => 'Recovery email sent.']);
@@ -34,5 +34,5 @@ protected function sendResetLinkFailedResponse(Request $request, $response)
     return back()->withErrors(
         ['email' => trans($response)]
     );
-}
+}*/
 }

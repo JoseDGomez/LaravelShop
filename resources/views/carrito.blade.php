@@ -28,6 +28,7 @@
 
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container">
+	<a href="{{url('/deleteCart')}}" class="btn btn-danger">Eliminar todos los productos </a>
 	<table id="cart" class="table table-hover table-condensed">
     				<thead>
 						<tr>
@@ -80,7 +81,7 @@
 					<tfoot>
 						
 						<tr>
-							<td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Seguir comprando</a></td>
+							<td><a href="{{url('/')}}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Seguir comprando</a></td>
 							<td colspan="2" class="hidden-xs"></td>
 							<td class="hidden-xs text-center"><strong>  Total: {{Cart::total()}} €</strong></td>
 							@if (Cart::count() == 0)

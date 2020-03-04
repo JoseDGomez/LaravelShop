@@ -13,9 +13,15 @@ class Carrito extends Controller
     public function index(){
         //var_dump(Cart::content());
         $categoria = Categoria::all();
-        
-        return view("carrito", ['categoria' => $categoria
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
+    
+     // 'application/json; charset=utf8'
+     // '{"id": 1420053, "name": "guzzle", ...}'
+        $localizacion = json_decode($response->getBody());
+        return view("carrito", ['categoria' => $categoria, 'localizacion' => $localizacion
         ]);
+        
     }
 
     public function addProductoInicio(Request $request){
@@ -47,7 +53,5 @@ class Carrito extends Controller
         return redirect('/carrito')->withSuccessMessage("Producto eliminado");
     }
 
-    public function destroy(){
-        Cart:destroy();
-    }
+  
 }

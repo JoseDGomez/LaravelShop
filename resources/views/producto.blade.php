@@ -46,7 +46,7 @@
 							<h2 class="product-name">{{$detalles->Nombre}}</h2>
 							
 							<div>
-								<h3 class="product-price">{{round($detalles->Precio_Venta-(($detalles->Precio_Venta*$detalles->Descuento)/100),2)}}<del class="product-old-price">{{$detalles->Precio_Venta}}</del></h3>
+								<h3 class="product-price">{{round($detalles->Precio_Venta-(($detalles->Precio_Venta*$detalles->Descuento)/100),2)}} €<del class="product-old-price">{{$detalles->Precio_Venta}} €</del></h3>
 								@if ($detalles->Stock > 0)
 								<span class="product-available">En stock</span>
 								@else

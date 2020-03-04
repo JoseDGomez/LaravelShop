@@ -27,7 +27,10 @@ Route::post('/updateProducto', 'Carrito@update');
 
 Route::post('/deleteProducto', 'Carrito@delete');
 
-Route::get('/deleteCart', 'Carrito@destroy');
+Route::get('/deleteCart', function(){
+    Cart::destroy();
+    return back();
+});
 
 
 
@@ -42,3 +45,11 @@ Route::post('/checkout' , 'Cliente@addPedido');
 Route::get('/userpage', 'Cliente@userpage');
 
 Route::post('/baja', 'Cliente@bajausuario');
+
+Route::get('/cancelPedido/{id}', 'Cliente@deletePedido');
+
+Route::get('/modificardatos', 'Cliente@cambiomodificacion');
+
+Route::get('/pedido/{id}', 'Cliente@detallePedido');
+
+Route::get('/download/{id}', 'Cliente@downloadPDF');

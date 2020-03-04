@@ -18,21 +18,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
             use Barryvdh\DomPDF\Facade as PDF;
             
             // Load Composer's autoloader
-            require 'C:\Users\Jotad\Documents\Xampp\htdocs\LaravelShop\vendor\autoload.php';
+            require '..\vendor\autoload.php';
 
-
+            
+    
 class Cliente extends Controller
 {
+
+    
+
     public function index(Request $request){
         
         $articulos = Articulos::where('Destacado', 1)->paginate(4);
         $categoria = Categoria::all();
+       
         $client = new \GuzzleHttp\Client();
         $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
-
- // 'application/json; charset=utf8'
- // '{"id": 1420053, "name": "guzzle", ...}'
-$localizacion = json_decode($response->getBody());
+    
+     // 'application/json; charset=utf8'
+     // '{"id": 1420053, "name": "guzzle", ...}'
+        $localizacion = json_decode($response->getBody());
 
         return view('inicio', [
             'articulos' => $articulos],
@@ -41,27 +46,46 @@ $localizacion = json_decode($response->getBody());
         }
     
         public function productoCategoria($id){
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
+
+ // 'application/json; charset=utf8'
+ // '{"id": 1420053, "name": "guzzle", ...}'
+            $localizacion = json_decode($response->getBody());
             $articulos = Articulos::where('Categoria_idCategoria', '=' , $id)->paginate(4);
             $categoria = Categoria::all();
+            $nombre = Categoria::select('Nombre')->where('idCategoria', $id)->get();
             return view('categoria', [
                 'articulos' => $articulos],
-                ['categoria' => $categoria
+                ['categoria' => $categoria, 'localizacion' => $localizacion, 'nombre'=>$nombre
                 ]);
         }
 
         public function detallesProducto($id){
+            $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
+    
+     // 'application/json; charset=utf8'
+     // '{"id": 1420053, "name": "guzzle", ...}'
+        $localizacion = json_decode($response->getBody());
             $detalles = Articulos::where('idProductos', $id)->get();
             $categoria = Categoria::all();
             return view('producto', [
                 'detalles' => $detalles,
-                'categoria' => $categoria
+                'categoria' => $categoria, 'localizacion' => $localizacion
                 ]);
         }
 
         public function checkout(){
+            $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
+    
+     // 'application/json; charset=utf8'
+     // '{"id": 1420053, "name": "guzzle", ...}'
+        $localizacion = json_decode($response->getBody());
             $categoria = Categoria::all();
             return view('checkout', [
-                'categoria' => $categoria
+                'categoria' => $categoria, 'localizacion' => $localizacion
                 ]);
         }
         
@@ -138,12 +162,18 @@ $localizacion = json_decode($response->getBody());
         }
 
       public function userpage(){
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
+    
+     // 'application/json; charset=utf8'
+     // '{"id": 1420053, "name": "guzzle", ...}'
+        $localizacion = json_decode($response->getBody());  
         $categoria = Categoria::all();
         $pedido = Pedido::where('users_id', auth()->user()->id)->get();
         
         return view('userpage', [
             'categoria' => $categoria
-        ,'pedidos' => $pedido
+        ,'pedidos' => $pedido, 'localizacion' => $localizacion
         ]);
       }  
 
@@ -154,8 +184,79 @@ $localizacion = json_decode($response->getBody());
         return redirect('/');
       }
 
-      public function deletePedido(){
-        Pedido::where('users_id', $request->id)->delete();
+      public function deletePedido($id){
+        Pedido::where('idPedido', $id)->update(['Estado' => 'C']);
         return redirect('/userpage');
       }
-    }
+
+      public function cambiomodificacion(){
+        $categoria = Categoria::all();
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
+    
+     // 'application/json; charset=utf8'
+     // '{"id": 1420053, "name": "guzzle", ...}'
+        $localizacion = json_decode($response->getBody());  
+          
+          return view('modificarusuario', [
+            
+        'categoria' => $categoria, 'localizacion' => $localizacion
+        ]);
+      }
+
+      public function detallePedido($id){
+        $idPedido = $id;  
+        $categoria = Categoria::all();
+        $productos = LineaPedido::where('Pedido_idPedido', $id)->get()->toArray();
+        $i=-1;
+        $total = 0;
+
+        foreach($productos as $producto){
+            $i++;
+            $datosProducto = Articulos::where("idProductos", $producto["Producto_idProducto"])->first();
+            $productos[$i]["Nombre"] = $datosProducto->Nombre;
+            $total += $producto["Precio"]*$producto["Cantidad"];
+        }
+
+        $productos['totaltodo']=$total;
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', 'http://ip-api.com/json/?lang=es&fields=country,countryCode,region,regionName,city');
+       
+     // 'application/json; charset=utf8'
+     // '{"id": 1420053, "name": "guzzle", ...}'
+        $localizacion = json_decode($response->getBody());  
+        
+          return view('detallespedido', [
+            
+            'productos' => $productos, 'categoria' => $categoria, 'localizacion' => $localizacion, 'idPedido' => $id
+        ]);
+      }
+
+      public function downloadPDF($id)
+      {
+          
+        
+        $productos = LineaPedido::where('Pedido_idPedido', $id)->get()->toArray();
+        $i=-1;
+        $total = 0;
+
+        foreach($productos as $producto){
+            $i++;
+            $datosProducto = Articulos::where("idProductos", $producto["Producto_idProducto"])->first();
+            $productos[$i]["Nombre"] = $datosProducto->Nombre;
+            $total += $producto["Precio"]*$producto["Cantidad"];
+        }
+
+        $productos['totaltodo']=$total;
+          //print_r($productos);
+          $pdf= PDF::loadView('factura', array("productos"=>$productos))->save(storage_path('app/public/') . 'factura.pdf');
+          return $pdf->download('factura.pdf');
+      
+         
+      
+      
+      
+     
+      }  
+}
+    

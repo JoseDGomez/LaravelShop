@@ -77,7 +77,7 @@
 									<div class="product-body">
 										
 										<h3 class="product-name"><a href="{{url('producto/'.$articulo->idProductos)}}">{{$articulo->Nombre}}</a></h3>
-										<h4 class="product-price">{{round($articulo->Precio_Venta-(($articulo->Precio_Venta*$articulo->Descuento)/100),2)}}<del class="product-old-price">{{$articulo->Precio_Venta}}</del></h4>
+										<h4 class="product-price">{{round($articulo->Precio_Venta-(($articulo->Precio_Venta*$articulo->Descuento)/100),2)}} €<del class="product-old-price">{{$articulo->Precio_Venta}} €</del></h4>
 										<div class="product-rating">
 											<i class="fa fa-star"></i>
 											<i class="fa fa-star"></i>
